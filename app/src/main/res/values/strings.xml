@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Notifications</string>
+    <string name="notifytext">Пора домой</string>
+    <string name="notifytitle">Напоминание</string>
+</resources>
