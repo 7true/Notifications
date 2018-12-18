@@ -7,12 +7,11 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Build;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
+import android.support.v4.app.NotificationCompat;
+import android.support.v7.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,6 +22,34 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Intent notificationIntent = new Intent(this, MainActivity.class);
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
+                notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        Resources res = this.getResources();
+
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID);
+
+        builder.setContentIntent(contentIntent)
+                //.setSmallIcon(R.drawable.ic_launcher_cat);
+                .setContentTitle(res.getString(R.string.notifytitle))
+                .setContentText(res.getString(R.string.notifytext))
+                .setSmallIcon(R.mipmap.ic_launcher_snow)
+                .setTicker("Выключай компьютер, иди домой")
+                .setWhen(System.currentTimeMillis())
+                .setAutoCancel(true)
+                .setLights(Color.BLUE, 5000, 5000);
+        createNotificationChannel();
+
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        //NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        Notification notif = new Notification();
+        notif.ledARGB = 0xFFff0000;
+        notif.flags = Notification.FLAG_SHOW_LIGHTS;
+        notif.ledOnMS = 100;
+        notif.ledOffMS = 100;
+        notificationManager.notify(NOTIFY_ID, builder.build());
     }
 
     private void createNotificationChannel() {
@@ -40,14 +67,15 @@ public class MainActivity extends AppCompatActivity {
             notificationManager.createNotificationChannel(channel);
         }
     }
+/*
     public void onClick(View view) {
         Intent notificationIntent = new Intent(this, MainActivity.class);
-        PendingIntent contentIntent = PendingIntent.getActivity(this,0,
-                notificationIntent,PendingIntent.FLAG_CANCEL_CURRENT);
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
+                notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         Resources res = this.getResources();
 
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this,CHANNEL_ID);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID);
 
         builder.setContentIntent(contentIntent)
                 //.setSmallIcon(R.drawable.ic_launcher_cat);
@@ -56,13 +84,18 @@ public class MainActivity extends AppCompatActivity {
                 .setSmallIcon(R.mipmap.ic_launcher_snow)
                 .setTicker("Выключай компьютер, иди домой")
                 .setWhen(System.currentTimeMillis())
-                .setAutoCancel(true);
-
+                .setAutoCancel(true)
+                .setLights(Color.BLUE, 5000, 5000);
         createNotificationChannel();
 
         NotificationManager notificationManager =
-               (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         //NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        Notification notif = new Notification();
+        notif.ledARGB = 0xFFff0000;
+        notif.flags = Notification.FLAG_SHOW_LIGHTS;
+        notif.ledOnMS = 100;
+        notif.ledOffMS = 100;
         notificationManager.notify(NOTIFY_ID, builder.build());
-    }
+    }*/
 }
