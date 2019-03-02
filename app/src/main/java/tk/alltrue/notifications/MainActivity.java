@@ -10,6 +10,7 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 
@@ -28,7 +29,8 @@ public class MainActivity extends AppCompatActivity {
         Resources res = this.getResources();
 
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID);
+
+        final NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID);
 
         builder.setContentIntent(contentIntent)
                 //.setSmallIcon(R.drawable.ic_launcher_cat);
@@ -38,18 +40,25 @@ public class MainActivity extends AppCompatActivity {
                 .setTicker("Выключай компьютер, иди домой")
                 .setWhen(System.currentTimeMillis())
                 .setAutoCancel(true)
-                .setLights(Color.BLUE, 5000, 5000);
-        createNotificationChannel();
+                .setLights(Color.RED, 5000, 5000);
 
-        NotificationManager notificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        //NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-        Notification notif = new Notification();
-        notif.ledARGB = 0xFFff0000;
-        notif.flags = Notification.FLAG_SHOW_LIGHTS;
-        notif.ledOnMS = 100;
-        notif.ledOffMS = 100;
-        notificationManager.notify(NOTIFY_ID, builder.build());
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                // yourMethod();
+                createNotificationChannel();
+                NotificationManager notificationManager =
+                        (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                //NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+                Notification notif = new Notification();
+                notif.ledARGB = 0xFFff0000;
+                notif.flags = Notification.FLAG_SHOW_LIGHTS;
+                notif.ledOnMS = 100;
+                notif.ledOffMS = 100;
+                notificationManager.notify(NOTIFY_ID, builder.build());
+            }
+        }, 3000);
+
     }
 
     private void createNotificationChannel() {
